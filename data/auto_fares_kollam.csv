@@ -1,2 +1,5 @@
 ride_id,pickup_type,distance_km,time_of_day,govt_expected_fare,actual_fare,remarks
 1,railway_station,3.0,day,53,100,Google Maps distance used; daytime trip; no waiting time
+2,railway_station,2.0,day,38,50,Short distance ride; small fare increase
+3,railway_station,3.0,night,79,120,Night journey with valid surcharge
+4,railway_station,5.0,day,98,150,Rainy weather; higher quoted fare
