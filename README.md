@@ -3,6 +3,9 @@
 ## Problem Statement
 Travelers in Kollam district often face uncertainty and disputes in last-mile auto and taxi fares due to non-usage of meters and arbitrary pricing. This project aims to build a data-driven system that estimates a fair fare range using Kerala government fare rules, distance, time, and real-world data to improve transparency and trust.
 
+## Motivation
+This project is inspired by common real-world experiences during last-mile travel from railway stations in Kollam, where passengers are often unsure whether the fare quoted by auto or taxi drivers is reasonable. The absence of transparent pricing frequently leads to discomfort and confusion for commuters, indicating a need for a simple, data-driven approach to estimate fair fares and improve trust in everyday travel.
+
 ## Milestones
 - [x] Project scope and problem statement finalized
 - [x] Environment setup
