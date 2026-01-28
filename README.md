@@ -9,7 +9,7 @@ This project is inspired by common real-world experiences during last-mile trave
 ## Milestones
 - [x] Project scope and problem statement finalized
 - [x] Environment setup
-- [ ] Data collection
+- [x] Data collection
 - [ ] Data analysis & preprocessing
 - [ ] ML model development
 - [ ] Backend API
@@ -27,6 +27,12 @@ This project is inspired by common real-world experiences during last-mile trave
 - Virtual environment (venv)
 - Core dependencies managed using `requirements.txt`
 - Structured project directories for data, modeling, API, and app layers
+
+## Dataset
+The project uses a small, manually curated dataset of last-mile auto-rickshaw trips from railway stations in Kollam district.  
+Each record includes trip distance (validated using Google Maps), time of travel, government-expected fare calculated using official Kerala auto fare rules, and the actual fare charged.
+
+The dataset is intentionally kept small and explainable at this stage to ensure correctness and transparency before applying data analysis and machine learning techniques.
 
 ## About Me
 I’m **Rino Robert**, a B.Tech student in **Artificial Intelligence & Data Science**, focused on building practical, end-to-end analytics projects aligned with real-world industry workflows.
