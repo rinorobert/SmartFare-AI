@@ -1,0 +1,2 @@
+ride_id,pickup_type,distance_km,time_of_day,govt_expected_fare,actual_fare,remarks
+1,railway_station,3.0,day,53,100,Google Maps distance used; daytime trip; no waiting time
