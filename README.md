@@ -11,7 +11,7 @@ This project is inspired by common real-world experiences during last-mile trave
 - [x] Environment setup
 - [x] Data collection
 - [x] Data analysis & preprocessing
-- [ ] ML model development
+- [x] ML model development
 - [ ] Backend API
 - [ ] Frontend application
 - [ ] Deployment
@@ -38,6 +38,10 @@ The dataset is intentionally kept small and explainable at this stage to ensure 
 Initial exploratory analysis was performed to understand pricing behavior and fare deviations.  
 A fare deviation metric was derived by comparing actual fares with government-expected fares, and a binary `overcharged` label was introduced to identify cases where passengers paid more than the expected amount.  
 Basic preprocessing steps were applied to ensure consistency and robustness for future data additions.
+
+## Machine Learning
+A simple regression model was developed to estimate typical real-world fare behavior based on trip distance and time of day.  
+The model’s output is used alongside government fare rules to derive an overcharge risk indicator, improving transparency for users.
 
 ## About Me
 I’m **Rino Robert**, a B.Tech student in **Artificial Intelligence & Data Science**, focused on building practical, end-to-end analytics projects aligned with real-world industry workflows.
