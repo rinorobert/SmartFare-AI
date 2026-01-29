@@ -10,7 +10,7 @@ This project is inspired by common real-world experiences during last-mile trave
 - [x] Project scope and problem statement finalized
 - [x] Environment setup
 - [x] Data collection
-- [ ] Data analysis & preprocessing
+- [x] Data analysis & preprocessing
 - [ ] ML model development
 - [ ] Backend API
 - [ ] Frontend application
@@ -33,6 +33,11 @@ The project uses a small, manually curated dataset of last-mile auto-rickshaw tr
 Each record includes trip distance (validated using Google Maps), time of travel, government-expected fare calculated using official Kerala auto fare rules, and the actual fare charged.
 
 The dataset is intentionally kept small and explainable at this stage to ensure correctness and transparency before applying data analysis and machine learning techniques.
+
+## Data Analysis
+Initial exploratory analysis was performed to understand pricing behavior and fare deviations.  
+A fare deviation metric was derived by comparing actual fares with government-expected fares, and a binary `overcharged` label was introduced to identify cases where passengers paid more than the expected amount.  
+Basic preprocessing steps were applied to ensure consistency and robustness for future data additions.
 
 ## About Me
 I’m **Rino Robert**, a B.Tech student in **Artificial Intelligence & Data Science**, focused on building practical, end-to-end analytics projects aligned with real-world industry workflows.
