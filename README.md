@@ -43,6 +43,10 @@ Basic preprocessing steps were applied to ensure consistency and robustness for 
 A simple regression model was developed to estimate typical real-world fare behavior based on trip distance and time of day.  
 The model’s output is used alongside government fare rules to derive an overcharge risk indicator, improving transparency for users.
 
+## Backend API
+The backend is implemented using FastAPI and exposes endpoints for fare estimation and overcharge risk analysis.  
+It integrates rule-based government fare calculation with an ML model trained on real-world fare data.
+
 ## About Me
 I’m **Rino Robert**, a B.Tech student in **Artificial Intelligence & Data Science**, focused on building practical, end-to-end analytics projects aligned with real-world industry workflows.
 
