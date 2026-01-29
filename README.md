@@ -13,7 +13,7 @@ This project is inspired by common real-world experiences during last-mile trave
 - [x] Data analysis & preprocessing
 - [x] ML model development
 - [x] Backend API
-- [ ] Frontend application
+- [x] Frontend application
 - [ ] Deployment
 
 ## Project Scope
@@ -54,6 +54,44 @@ Based on this input, the API returns:
 - An **overcharge risk indicator**, which helps identify whether the quoted fare is unusually high  
 
 The backend is intentionally designed to be simple, explainable, and modular, making it easy to integrate with a future **frontend interface or mobile application**.
+
+## Frontend
+
+The frontend is built using Streamlit, designed to be simple, visual, and easy to use for everyday commuters.
+
+It allows users to:
+- Enter trip distance and time of travel
+- View government-expected fare and typical real-world fare
+- Compare fares visually using charts
+- Identify potential overcharging through clear risk indicators
+
+---
+## ▶️ How to Run the Project Locally
+
+1️⃣ Start the Backend (FastAPI)
+```bash
+uvicorn api.main:app --reload
+```
+
+Backend will run at:
+http://127.0.0.1:8000
+
+2️⃣ Start the Frontend (Streamlit)
+```bash
+streamlit run frontend/app.py
+```
+
+Frontend will open at:
+http://localhost:8501
+
+⚠️ Make sure the backend is running before starting the frontend.
+
+⚠️ Disclaimer
+This tool is intended for informational and transparency purposes only.
+Government fares are calculated strictly using official Kerala auto fare rules.
+Real-world and quoted fares are estimates used to highlight pricing patterns and potential overcharging.
+
+---
 
 ## About Me
 I’m **Rino Robert**, a B.Tech student in **Artificial Intelligence & Data Science**, focused on building practical, end-to-end analytics projects aligned with real-world industry workflows.
