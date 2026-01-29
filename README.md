@@ -12,7 +12,7 @@ This project is inspired by common real-world experiences during last-mile trave
 - [x] Data collection
 - [x] Data analysis & preprocessing
 - [x] ML model development
-- [ ] Backend API
+- [x] Backend API
 - [ ] Frontend application
 - [ ] Deployment
 
@@ -44,8 +44,16 @@ A simple regression model was developed to estimate typical real-world fare beha
 The model’s output is used alongside government fare rules to derive an overcharge risk indicator, improving transparency for users.
 
 ## Backend API
-The backend is implemented using FastAPI and exposes endpoints for fare estimation and overcharge risk analysis.  
-It integrates rule-based government fare calculation with an ML model trained on real-world fare data.
+
+The backend of this project is built using **FastAPI** and serves as the core engine for fare transparency.  
+It exposes a `/predict` endpoint where basic trip details such as distance and time of travel are provided as input.
+
+Based on this input, the API returns:
+- The **government-expected fare**, calculated using official fare rules  
+- An **ML-estimated real-world fare**, reflecting typical charging behavior observed in practice  
+- An **overcharge risk indicator**, which helps identify whether the quoted fare is unusually high  
+
+The backend is intentionally designed to be simple, explainable, and modular, making it easy to integrate with a future **frontend interface or mobile application**.
 
 ## About Me
 I’m **Rino Robert**, a B.Tech student in **Artificial Intelligence & Data Science**, focused on building practical, end-to-end analytics projects aligned with real-world industry workflows.
