@@ -6,3 +6,4 @@ fastapi
 uvicorn
 streamlit
 requests
+altair==4.2.2
