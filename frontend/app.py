@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import pandas as pd
+import time
 
 # Page config
 st.set_page_config(
@@ -175,9 +176,25 @@ if st.session_state.checked:
                 "on location, demand, waiting time, and driver discretion. This tool is intended for "
                 "informational and transparency purposes only."
             )
+            st.divider()
+
+            st.markdown(
+                "<p style='text-align: center; color: gray; font-size: 0.85em;'>"
+                "© Rino Robert • 2026 • SmartFare-AI • Educational project"
+                "</p>",
+                unsafe_allow_html=True
+            )
 
         else:
             st.error("Unable to fetch fare details from the backend.")
 
     except Exception:
-        st.error("Backend server is not reachable. Please ensure it is running.")
+            with st.spinner("Waking up the server..."):
+                 time.sleep(2)
+            st.caption(
+                "Tip: Free servers go to sleep when idle. First request may be slow."
+            )
+            st.warning(
+                "⏳ The backend is waking up. On free hosting, this may take up to a minute. "
+                "Please wait and try again."
+            )
