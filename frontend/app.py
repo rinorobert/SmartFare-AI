@@ -90,24 +90,28 @@ if st.session_state.checked:
                     data["ml_estimated_real_world_fare"]
                 )
             
-            st.markdown("### 🤔 What do these fare amounts mean?")
-
-            explanation = (
-                "• **Government Fare** ~ is the official price fixed by the government based on distance and time.\n\n"
-                "• **Typical Fare** ~ shows what passengers are usually asked to pay in real life for similar trips.\n\n"
-                "• **Quoted Fare** ~ is a sample amount used here to compare and check for possible overcharging.\n\n"
-                "📌 **Example:** If the government fare for a 3 km trip is ₹50, but drivers usually ask around ₹70, "
-                "this tool helps you understand that difference and shows whether the quoted fare is reasonable.\n\n"
-                "• **Overcharge risk** highlights how far the quoted fare deviates from expected norms."
-            )
-
-            # Add night-time explanation only if applicable
-            if time_of_day == "night":
-                explanation += (
-                    "\n\n• **Night-time travel (10 pm – 5 am)** includes a legally permitted surcharge as per government rules."
-                )
-
-            st.info(explanation)
+            with st.expander("🤔 What do these fare amounts mean?"):
+                explanation = """
+                • **Government Fare** ~ Official fare calculated using Kerala government auto fare rules.
+            
+                • **Typical Fare** ~ ML-based estimate of what passengers are commonly charged for similar trips in real-world conditions.
+            
+                • **Quoted Fare** ~ Fare entered by the user or quoted by the driver for the trip.
+            
+                📌 **Example:**
+            
+                If the government fare for a 3 km trip is ₹50, but passengers are usually charged around ₹70, this tool helps you understand that difference and shows whether the quoted fare is reasonable.
+            
+                • **Overcharge Risk** indicates whether the quoted fare appears fair, slightly higher, or significantly higher than expected.
+                """
+            
+                if time_of_day.lower() == "night":
+                    explanation += """
+            
+                    • **Night-time Travel (10 PM – 5 AM)** includes a legally permitted surcharge as per Kerala government rules.
+                    """
+            
+                st.markdown(explanation)
 
             #Bar Chart
             st.markdown("### 📊 Fare Comparison")
@@ -115,7 +119,7 @@ if st.session_state.checked:
             chart_data = pd.DataFrame({
                 "Fare Type": [
                     "Government Fare",
-                    "Typical Real-World Fare",
+                    "Typical Fare",
                     "Quoted Fare"
                 ],
                 "Amount (₹)": [
