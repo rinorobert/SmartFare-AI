@@ -30,6 +30,12 @@ This repeated uncertainty made me want to build a tool that could clearly show:
 ## 🌍 Live Demo
 - **Frontend App**: https://smartfare-ai-mqpgtrah6ub96c2h3dugsc.streamlit.app/  
 - **Backend API (Docs)**: https://smartfare-ai-backend.onrender.com/docs
+  
+⚠️ Deployment Notice
+
+This project is hosted using free-tier cloud services (Streamlit Community Cloud and Render).
+The frontend and backend may enter a sleep state after periods of inactivity.
+If the application does not load immediately, please wait 30–60 seconds for the services to wake up and then refresh the page.
 
 ---
 
