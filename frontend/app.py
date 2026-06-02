@@ -17,6 +17,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.info(
+    "ℹ️ First request may take 30–60 seconds while the backend wakes up from inactivity."
+)
+
 st.divider()
 
 # Input section
