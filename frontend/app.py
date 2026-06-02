@@ -76,18 +76,24 @@ if st.session_state.checked:
             # Fare comparison section
             st.markdown("### 💰 Fare Breakdown")
 
-            c1, c2 = st.columns(2)
+            c1, c2, c3 = st.columns(3)
 
             with c1:
                 st.metric(
-                    "Government Expected Fare (₹)",
+                    "Government Fare (₹)",
                     data["government_expected_fare"]
                 )
 
             with c2:
                 st.metric(
-                    "Typical Real-World Fare (₹)",
+                    "Typical Fare (₹)",
                     data["ml_estimated_real_world_fare"]
+                )
+
+            with c3:
+                st.metric(
+                    "Quoted Fare",
+                    f"₹{data['simulated_quoted_fare']:.1f}"
                 )
             
             with st.expander("🤔 What do these fare amounts mean?"):
@@ -114,7 +120,7 @@ if st.session_state.checked:
                 st.markdown(explanation)
 
             #Bar Chart
-            st.markdown("### 📊 Fare Comparison")
+            st.markdown("### 📊 Compare the Three Fare Estimates")
 
             chart_data = pd.DataFrame({
                 "Fare Type": [
@@ -130,6 +136,9 @@ if st.session_state.checked:
             })
 
             st.bar_chart(chart_data.set_index("Fare Type"))
+            st.caption(
+                "Compare the official government fare, the ML-estimated typical fare, and the quoted fare used for risk assessment."
+            )
             
             #Risk Badge
             st.markdown("### 🚦 Overcharge Risk Indicator")
@@ -144,7 +153,7 @@ if st.session_state.checked:
                 st.success("✅ Low Risk: Fare appears reasonable")
             
             #Progress Indicator
-            st.markdown("### 📈 Fare Deviation Level")
+            st.markdown("### 📈 Difference from Government Fare")
 
             deviation_ratio = (
                 data["simulated_quoted_fare"] /
@@ -156,7 +165,7 @@ if st.session_state.checked:
             st.progress(progress_value)
 
             st.caption(
-                "This bar represents how far the quoted fare deviates from official pricing norms."
+                "Shows how much the quoted fare differs from the official government fare."
             )
 
             deviation_percent = (
@@ -179,11 +188,11 @@ if st.session_state.checked:
             st.divider()
 
             st.caption(
-                "⚠️ **Disclaimer**: Government fare calculations are based on officially published Kerala "
-                "auto-rickshaw fare rules. Real-world fare estimates are indicative and may vary depending "
-                "on location, demand, waiting time, and driver discretion. This tool is intended for "
-                "informational and transparency purposes only."
+                "⚠️ This tool is for informational purposes only. "
+                "Government fares follow official Kerala auto-rickshaw fare rules. "
+                "Typical fares are ML-based estimates derived from sample trip data and may vary due to traffic, waiting time, route conditions, demand, and local pricing practices."
             )
+            
             st.divider()
 
             st.markdown(
@@ -196,13 +205,15 @@ if st.session_state.checked:
         else:
             st.error("Unable to fetch fare details from the backend.")
 
-    except Exception:
-            with st.spinner("Waking up the server..."):
-                 time.sleep(2)
-            st.caption(
-                "Tip: Free servers go to sleep when idle. First request may be slow."
-            )
-            st.warning(
-                "⏳ The backend is waking up. On free hosting, this may take up to a minute. "
-                "Please wait and try again."
-            )
+    except requests.exceptions.Timeout:
+        st.warning(
+            "⏳ Backend is waking up. Free-tier hosting may take 30–60 seconds after inactivity. Please try again shortly."
+        )
+    
+    except requests.exceptions.ConnectionError:
+        st.warning(
+            "🔌 Unable to connect to the backend right now. The server may still be starting."
+        )
+    
+    except Exception as e:
+        st.error(f"Unexpected error: {e}")
