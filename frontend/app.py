@@ -12,6 +12,10 @@ st.set_page_config(
 
 # Header
 st.markdown("## 🚕 SmartFare-AI")
+st.success(
+    "📜 Based on Kerala Government Auto Fare Notification (2022)"
+)
+
 st.markdown(
     "<p style='color:gray;'>A data-driven tool to understand auto fare fairness using government rules and real-world pricing patterns.</p>",
     unsafe_allow_html=True
@@ -33,14 +37,22 @@ with col1:
         "Distance (km)",
         min_value=0.5,
         step=0.1,
-        help="Distance from pickup point to destination"
+        help="Distance from pickup location to destination in kilometers."
     )
 
 with col2:
-    time_of_day = st.selectbox(
-        "Time of Travel",
-        ["day", "night"],
-        help="Night time usually has additional charges"
+    journey_time = st.radio(
+        "Journey Time",
+        [
+            "Day (5:00 AM – 10:00 PM)",
+            "Night (10:00 PM – 5:00 AM)"
+        ],
+        help="Select day or night travel. Night journeys (10 PM–5 AM) have additional charges under Kerala rules."
+    )
+    time_of_day = (
+        "night"
+        if journey_time.startswith("Night")
+        else "day"
     )
 
 with col3:
@@ -48,7 +60,40 @@ with col3:
         "Quoted Fare (₹)",
         min_value=0.0,
         step=1.0,
-        help="Fare quoted by the auto driver"
+        help="Fare quoted by the auto driver. Used to determine whether the fare appears reasonable."
+    )
+
+col4, col5, col6 = st.columns(3)
+
+with col4:
+    waiting_minutes = st.number_input(
+        "Waiting Time(min)",
+        min_value=0,
+        step=5,
+        help="Total waiting time during the trip. Kerala rules permit a detention charge of ₹10 per 15 minutes."
+    )
+
+with col5:
+    return_journey_choice = st.radio(
+        "Return Journey",
+        ["No", "Yes"],
+        horizontal=True,
+        help="Kerala rules allow an additional 50% return journey charge in non-major city areas."
+    )
+    return_journey = return_journey_choice == "Yes"
+
+with col6:
+    journey_area = st.radio(
+        "Journey Area",
+        ["Major City", "Non-Major City"],
+        horizontal=True,
+        help="Major Cities: Kollam, Kochi, Thiruvananthapuram, Thrissur, Kozhikode, Kannur, Palakkad, Kottayam"
+    )
+    major_city = journey_area == "Major City"
+
+if major_city and return_journey:
+    st.warning(
+        "Return journey charges are not applicable in Kerala major city areas and will not be included in the fare calculation."
     )
 
 st.markdown("")
@@ -57,17 +102,26 @@ if "checked" not in st.session_state:
     st.session_state.checked = False
 
 # Action button
-if st.button("🔍 Check Fare Transparency", use_container_width=True):
+if st.button("📋 Generate Transparency Report", use_container_width=True):
     st.session_state.checked = True
 
 st.divider()
 
 # API call
 if st.session_state.checked:
+    if quoted_fare <= 19:
+        st.warning(
+            "⚠️ Please enter the fare quoted by the auto driver."
+        )
+        st.stop()
+
     payload = {
         "distance_km": distance,
         "time_of_day": time_of_day,
-        "quoted_fare": quoted_fare
+        "quoted_fare": quoted_fare,
+        "waiting_minutes": waiting_minutes,
+        "return_journey": return_journey,
+        "major_city": major_city
     }
 
     try:
@@ -82,51 +136,103 @@ if st.session_state.checked:
 
             st.success("Fare analysis completed successfully")
 
+            difference = data["quoted_fare"] - data["government_expected_fare"]
+
+            if difference > 0:
+                verdict = "⚠️ Higher Than Government Fare"
+            elif difference < 0:
+                verdict = "✅ Lower Than Government Fare"
+            else:
+                verdict = "✔ Matches Government Fare"
+
+            st.markdown(
+                f"""
+                <div style="
+                    border:2px solid #444;
+                    border-radius:12px;
+                    padding:25px;
+                    background-color:#111827;
+                    margin-bottom:20px;
+                ">
+
+                <h2 style="text-align:center;">
+                🧾 SmartFare Transparency Receipt
+                </h2>
+
+                <hr>
+
+                <b>Distance:</b> {data['distance_km']} km<br>
+                <b>Journey Time:</b> {data['time_of_day'].title()}<br>
+
+                <hr>
+
+                <b>Government Fare:</b> ₹{data['government_expected_fare']:.2f}<br>
+                <b>Quoted Fare:</b> ₹{data['quoted_fare']:.2f}<br>
+
+                <hr>
+
+                <b>Difference:</b> ₹{difference:.2f}<br>
+                <b>Risk Level:</b> {data['overcharge_risk']}<br>
+
+                <hr>
+
+                <b>{verdict}</b>
+
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
             # Fare comparison section
-            st.markdown("### 💰 Fare Breakdown")
+            st.markdown("### 📋 Kerala Government Fare Breakdown")
 
-            c1, c2, c3 = st.columns(3)
+            breakdown_df = pd.DataFrame({
+                "Fare Component": [
+                    "Minimum Fare",
+                    "Distance Charge",
+                    "Waiting Charge",
+                    "Return Charge",
+                    "Night Charge"
+                ],
+                "Amount (₹)": [
+                    data["minimum_fare"],
+                    data["distance_charge"],
+                    data["waiting_charge"],
+                    data["return_charge"],
+                    data["night_charge"]
+                ]
+            })
 
-            with c1:
-                st.metric(
-                    "Government Fare (₹)",
-                    data["government_expected_fare"]
+            st.dataframe(
+                breakdown_df,
+                hide_index=True,
+                use_container_width=True
+            )
+
+            st.success(
+                f"Total Government Fare: ₹{data['government_expected_fare']:.2f}"
+            )
+            
+                
+            #Risk Badge
+            st.markdown("### 🚦 Overcharge Risk Indicator")
+
+            risk = data["overcharge_risk"]
+
+            if risk == "High":
+                st.error(
+                    "🚨 High Risk: The quoted fare is significantly higher than expected."
                 )
 
-            with c2:
-                st.metric(
-                    "Typical Fare (₹)",
-                    data["ml_estimated_real_world_fare"]
+            elif risk == "Medium":
+                st.warning(
+                    "⚠️ Medium Risk: The quoted fare is slightly above the expected range."
                 )
 
-            with c3:
-                st.metric(
-                    "Quoted Fare",
-                    f"₹{data['quoted_fare']:.1f}"
+            else:
+                st.success(
+                    "✅ Low Risk: The quoted fare appears reasonable."
                 )
-            
-            with st.expander("🤔 What do these fare amounts mean?"):
-                explanation = """
-                • **Government Fare** ~ Official fare calculated using Kerala government auto fare rules.
-            
-                • **Typical Fare** ~ ML-based estimate of what passengers are commonly charged for similar trips in real-world conditions.
-            
-                • **Quoted Fare** ~ Fare entered by the user or quoted by the driver for the trip.
-            
-                📌 **Example:**
-            
-                If the government fare for a 3 km trip is ₹50, but passengers are usually charged around ₹70, this tool helps you understand that difference and shows whether the quoted fare is reasonable.
-            
-                • **Overcharge Risk** indicates whether the quoted fare appears fair, slightly higher, or significantly higher than expected.
-                """
-            
-                if time_of_day.lower() == "night":
-                    explanation += """
-            
-                    • **Night-time Travel (10 PM – 5 AM)** includes a legally permitted surcharge as per Kerala government rules.
-                    """
-            
-                st.markdown(explanation)
 
             #Bar Chart
             st.markdown("### 📊 Compare the Three Fare Estimates")
@@ -148,18 +254,61 @@ if st.session_state.checked:
             st.caption(
                 "Compare the official government fare, the ML-estimated typical fare, and the quoted fare used for risk assessment."
             )
+
+            with st.expander("🤔 What do these fare amounts mean?"):
+                st.markdown("""
+                    ### Government Fare 🚕
+                    The official fare calculated using Kerala Government auto-rickshaw fare rules.
+
+                    It includes applicable charges such as:
+
+                    - Distance travelled
+                    - Waiting time
+                    - Night surcharge (10 PM – 5 AM)
+                    - Return journey charge (where permitted)
+
+                    ---
+
+                    ### Typical Fare 📊
+                    An estimate of what passengers are commonly charged for similar trips.
+
+                    This reflects real-world pricing patterns and may differ from the official government fare.
+
+                    ---
+
+                    ### Quoted Fare 💰
+                    The amount quoted by the auto driver for your trip.
+
+                    Enter the fare shown on the meter, pre-paid slip, or the amount requested by the driver.
+
+                    ---
+
+                    ### What does the Risk Indicator mean?
+
+                    🟢 Low Risk  
+                    The quoted fare is close to expected values.
+
+                    🟡 Medium Risk  
+                    The fare is slightly higher than expected.
+
+                    🔴 High Risk  
+                    The fare is significantly higher than expected and may deserve closer attention.
+
+                    ---
+
+                    ### Example
+
+                    Suppose your trip is:
+
+                    - Distance: 3.5 km
+                    - Day travel
+                    - No waiting time
+
+                    Government Fare: ₹60
+
+                    If a driver asks for ₹80, the tool compares that amount against government rules and typical charging patterns to help you understand whether the fare appears reasonable.
+                    """)            
             
-            #Risk Badge
-            st.markdown("### 🚦 Overcharge Risk Indicator")
-
-            risk = data["overcharge_risk"]
-
-            if risk == "High":
-                st.error("🚨 High Risk: Fare is significantly above expected range")
-            elif risk == "Medium":
-                st.warning("⚠️ Medium Risk: Fare is slightly higher than usual")
-            else:
-                st.success("✅ Low Risk: Fare appears reasonable")
             
             #Progress Indicator
             st.markdown("### 📈 Difference from Government Fare")
