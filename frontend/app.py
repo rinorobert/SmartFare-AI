@@ -26,7 +26,7 @@ st.divider()
 # Input section
 st.markdown("### 🧾 Trip Details")
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 
 with col1:
     distance = st.number_input(
@@ -41,6 +41,14 @@ with col2:
         "Time of Travel",
         ["day", "night"],
         help="Night time usually has additional charges"
+    )
+
+with col3:
+    quoted_fare = st.number_input(
+        "Quoted Fare (₹)",
+        min_value=0.0,
+        step=1.0,
+        help="Fare quoted by the auto driver"
     )
 
 st.markdown("")
@@ -58,12 +66,13 @@ st.divider()
 if st.session_state.checked:
     payload = {
         "distance_km": distance,
-        "time_of_day": time_of_day
+        "time_of_day": time_of_day,
+        "quoted_fare": quoted_fare
     }
 
     try:
         response = requests.post(
-            "https://smartfare-ai-backend.onrender.com/predict",
+            "http://127.0.0.1:8000/predict",
             json=payload,
             timeout=20
         )
@@ -93,7 +102,7 @@ if st.session_state.checked:
             with c3:
                 st.metric(
                     "Quoted Fare",
-                    f"₹{data['simulated_quoted_fare']:.1f}"
+                    f"₹{data['quoted_fare']:.1f}"
                 )
             
             with st.expander("🤔 What do these fare amounts mean?"):
@@ -131,7 +140,7 @@ if st.session_state.checked:
                 "Amount (₹)": [
                     data["government_expected_fare"],
                     data["ml_estimated_real_world_fare"],
-                    data["simulated_quoted_fare"]
+                    data["quoted_fare"]
                 ]
             })
 
@@ -156,7 +165,7 @@ if st.session_state.checked:
             st.markdown("### 📈 Difference from Government Fare")
 
             deviation_ratio = (
-                data["simulated_quoted_fare"] /
+                data["quoted_fare"] /
                 data["government_expected_fare"]
             )
 
@@ -169,7 +178,7 @@ if st.session_state.checked:
             )
 
             deviation_percent = (
-                    (data["simulated_quoted_fare"] - data["government_expected_fare"])
+                    (data["quoted_fare"] - data["government_expected_fare"])
                     / data["government_expected_fare"]
             ) * 100
             if deviation_percent > 0:
@@ -203,7 +212,8 @@ if st.session_state.checked:
             )
 
         else:
-            st.error("Unable to fetch fare details from the backend.")
+            st.error(f"Status Code: {response.status_code}")
+            st.write(response.text)
 
     except requests.exceptions.Timeout:
         st.warning(

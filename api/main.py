@@ -10,7 +10,8 @@ app = FastAPI(
 
 class FareRequest(BaseModel):
     distance_km: float
-    time_of_day: str  # "day" or "night"
+    time_of_day: str
+    quoted_fare: float
 
 
 def predict_real_world_fare(distance_km: float, time_of_day: str) -> float:
@@ -53,11 +54,8 @@ def predict_fare(data: FareRequest):
     govt_fare = calculate_govt_fare(data.distance_km, data.time_of_day)
     predicted_fare = predict_real_world_fare(data.distance_km, data.time_of_day)
 
-    # Simulated quoted fare for now
-    quoted_fare = round(predicted_fare * 1.1, 2)
-
     risk = overcharge_risk(
-        actual=quoted_fare,
+        actual=data.quoted_fare,
         predicted=predicted_fare
     )
 
@@ -66,7 +64,7 @@ def predict_fare(data: FareRequest):
         "time_of_day": data.time_of_day,
         "government_expected_fare": govt_fare,
         "ml_estimated_real_world_fare": predicted_fare,
-        "simulated_quoted_fare": quoted_fare,
+        "quoted_fare": data.quoted_fare,
         "overcharge_risk": risk
     }
 
