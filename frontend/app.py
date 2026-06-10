@@ -336,7 +336,6 @@ if st.session_state["page"] == "analyzer":
                 "The quoted fare exactly matches the government fare."
             )
           
-
 if st.session_state["page"] == "breakdown":
     if analysis_complete and data:
 
@@ -599,11 +598,7 @@ if st.session_state.checked:
     
     except Exception as e:
         st.error(f"Unexpected error: {e}")
-    
 
-st.caption(
-    "SmartFare-AI provides informational fare transparency estimates based on Kerala Government auto-rickshaw fare rules and project assumptions. Actual fares may vary depending on route, traffic conditions, waiting time, and local practices."
-    )
             
 st.divider()
 
