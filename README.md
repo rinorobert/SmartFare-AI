@@ -1,150 +1,163 @@
-# SmartFare-AI – Auto Fare Transparency System
+# 🚕 SmartFare-AI
 
-## Problem Statement
-Travellers in Kollam district, especially during last-mile journeys from railway stations, often face confusion about auto and taxi fares. Meters are rarely used, and prices are usually quoted on the spot, which makes it difficult to know whether the fare is fair or not.
+### AI-Powered Fare Transparency Platform for Kerala Auto-Rickshaws
 
-This project aims to build a simple, data-driven system that estimates fair fares using Kerala government rules along with real-world pricing patterns, helping improve transparency and trust for everyday commuters.
+SmartFare-AI is a full-stack machine learning application that helps passengers evaluate the fairness of auto-rickshaw fares using Kerala Government fare regulations and AI-based fare estimation.
+
+The system combines a rule-based fare engine with machine learning predictions to generate fare transparency reports, fare breakdowns, and overcharge risk assessments through an interactive web application.
+
+---
+
+## 🌟 Project Highlights
+
+- Built an end-to-end AI-powered fare transparency platform
+- Implemented Kerala Government fare calculation rules
+- Developed an ML-based fare estimation model using Scikit-learn
+- Designed REST APIs using FastAPI
+- Created an interactive Streamlit dashboard
+- Deployed frontend and backend on cloud infrastructure
 
 ---
 
 ## Motivation
-The idea for this project came from my own experiences while traveling from Kollam railway station to my home. Many times, I wasn’t sure whether the amount asked by the auto driver was reasonable, even though government fare rules exist.
 
-This repeated uncertainty made me want to build a tool that could clearly show:
-- What the government-expected fare should be
-- What people are usually charged in real life
-- Whether a quoted fare looks reasonable or not
+The idea for this project came from my own experiences using auto-rickshaws across Kerala, where it was often difficult to determine whether a quoted fare was reasonable, even though government fare rules exist.
+
+This repeated uncertainty inspired me to build a transparent fare analysis system that could instantly show:
+
+- The government-expected fare
+- A typical real-world fare estimate
+- Whether a quoted fare appears reasonable
+
+The goal is to make fare information more accessible and understandable for everyday commuters.
 
 ---
 
-## Milestones
-- [x] Problem definition and scope
-- [x] Data collection and preprocessing
-- [x] Machine learning model
-- [x] Backend API (FastAPI)
-- [x] Frontend application (Streamlit)
-- [x] Deployment
+## ✨ Key Features
+
+* Government Fare Calculation Engine
+* AI-Based Fare Estimation
+* Fare Transparency Reports
+* Overcharge Risk Assessment
+* Waiting Time & Return Journey Support
+* Major City Fare Rule Handling
+* Interactive Fare Breakdown Dashboard
+* Kerala Fare Rules Reference
+* FastAPI Backend + Streamlit Frontend
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer            | Technology                        |
+| ---------------- | --------------------------------- |
+| Frontend         | Streamlit                         |
+| Backend          | FastAPI                           |
+| Machine Learning | Scikit-learn                      |
+| Data Processing  | Pandas, NumPy                     |
+| Deployment       | Streamlit Community Cloud, Render |
+| Language         | Python 3.11                       |
+
+---
+
+## 🏗️ Architecture
+
+```text
+User
+ ↓
+Streamlit Frontend
+ ↓
+FastAPI Backend
+ ↓
+Fare Rule Engine + ML Model
+ ↓
+Fare Transparency Report
+```
+
+---
+
+## 💡 Skills Demonstrated
+
+* Machine Learning
+* Data Analysis
+* Feature Engineering
+* REST API Development
+* Backend Engineering
+* Frontend Development
+* Cloud Deployment
+* Rule-Based Systems
+* UI/UX Design
 
 ---
 
 ## 🌍 Live Demo
-- **Frontend App**: https://smartfare-ai-mqpgtrah6ub96c2h3dugsc.streamlit.app/  
-- **Backend API (Docs)**: https://smartfare-ai-backend.onrender.com/docs
-  
-⚠️ Deployment Notice
 
-This project is hosted using free-tier cloud services (Streamlit Community Cloud and Render).
-The frontend and backend may enter a sleep state after periods of inactivity.
-If the application does not load immediately, please wait 30–60 seconds for the services to wake up and then refresh the page.
+**Frontend:** https://smartfare-ai-mqpgtrah6ub96c2h3dugsc.streamlit.app/
+
+**Backend API Docs:** https://smartfare-ai-backend.onrender.com/docs
+
+> Note: The project currently uses free-tier cloud hosting. Initial loading may take a few seconds after periods of inactivity.
 
 ---
 
-## Project Scope
-- Initial focus: Auto-rickshaws  
-- Region: Kollam district, Kerala  
-- Common entry point: Railway stations  
-- Designed to scale to taxis and other regions in the future  
+## 📚 Documentation
+
+### Test Cases
+
+📄 Test Cases: [View Test Cases](docs/test_cases.md)
+
+### Application Screenshots
 
 ---
 
-## Tech Stack
-- Python 3.11  
-- FastAPI (Backend)  
-- Streamlit (Frontend)  
-- Scikit-learn (ML)  
-- Pandas, NumPy  
-- Render & Streamlit Community Cloud (Deployment)
+#### 1. Fare Analyzer
+
+![Fare Analyzer](assets/analyzer.png)
 
 ---
 
-## Dataset
-The dataset is small and manually created using real trip examples from Kollam railway stations.  
-Each entry includes:
-- Trip distance (verified using Google Maps)
-- Time of travel (day/night)
-- Government-expected fare (based on official rules)
-- Actual fare charged
+#### 2. Fare Transparency Report
 
-The dataset is intentionally kept small and simple to make the logic easy to understand and explain.
+![Fare Transparency Report](assets/report.png)
 
 ---
 
-## Machine Learning Approach
-A simple regression model is used to estimate typical real-world fare behavior based on distance and time of day.  
-This ML estimate is not meant to replace government rules, but to reflect what usually happens in practice.
+#### 3. Fare Breakdown
 
-By comparing:
-- Government fare  
-- ML-estimated real-world fare  
-- Quoted fare  
-
-the system highlights a possible overcharge risk for users.
+![Fare Breakdown](assets/breakdown.png)
 
 ---
 
-## Backend API
-The backend is built using **FastAPI** and exposes a `/predict` endpoint.
+#### 4. Kerala Fare Rules
 
-For a given trip, the API returns:
-- Government-expected fare
-- ML-estimated real-world fare
-- Overcharge risk indicator
-
-The backend is kept modular and simple so it can be easily extended later.
-
----
-
-## Frontend
-The frontend is built using **Streamlit** with a focus on clarity and usability.
-
-Users can:
-- Enter trip distance and time of travel
-- View a clear fare breakdown
-- Compare fares visually using charts
-- Understand overcharge risk through simple indicators and explanations
+![Fare Calculation Rules](assets/rules.png)
 
 ---
 
 ## ▶️ Run Locally
 
 ### Start Backend
+
 ```bash
 uvicorn api.main:app --reload
 ```
 
-Backend will run at:
-http://127.0.0.1:8000
-
 ### Start Frontend
+
 ```bash
 streamlit run frontend/app.py
 ```
 
-Frontend will open at:
-http://localhost:8501
-
-⚠️ Make sure the backend is running before starting the frontend.
-
-## ⚠️ Disclaimer
-This tool is intended for informational and transparency purposes only.
-Government fares are calculated strictly using official Kerala auto fare rules.
-Real-world and quoted fares are estimates used to highlight pricing patterns and potential overcharging.
-
 ---
 
-## Future Enhancements
-This project is intentionally kept simple in its first version. Possible future improvements include:
-- Support for waiting time and return journey charges
-- Map-based distance calculation instead of manual input
-- Taxi fare support alongside auto-rickshaws
-- Weather or time-based fare analysis
-- Improved ML models using a larger real-world dataset
-- Explainable AI (XAI) features to show how fare estimates are derived
+## 👨‍💻 About Me
 
----
+**Rino Robert**
 
-## About Me
-I’m **Rino Robert**, a B.Tech student in **Artificial Intelligence & Data Science**, focused on building practical, end-to-end analytics projects aligned with real-world industry workflows.
+B.Tech – Artificial Intelligence & Data Science
 
-📧 Email: rinorobert710@gmail.com  
+📧 [rinorobert710@gmail.com](mailto:rinorobert710@gmail.com)
+
 🔗 LinkedIn: https://www.linkedin.com/in/rino-robert/
+
+🔗 GitHub: https://github.com/rinorobert
