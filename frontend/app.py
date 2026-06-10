@@ -65,10 +65,6 @@ if st.session_state["page"] == "analyzer":
         unsafe_allow_html=True
     )
 
-    st.info(
-        "ℹ️ First request may take 30–60 seconds while the backend wakes up from inactivity."
-    )
-
     col1, col2, col3 = st.columns(3)
 
     with col1:
@@ -129,7 +125,8 @@ if st.session_state["page"] == "analyzer":
             "Return Journey",
             ["No", "Yes"],
             horizontal=True,
-            key="return_journey_choice"
+            key="return_journey_choice",
+            help="Return journey charges are not applicable in major cities like Thiruvananthapuram, Kollam, Kochi, Thrissur, Kozhikode, Kannur, Palakkad, Kottayam"
         )
         return_journey = return_journey_choice == "Yes"
         st.session_state["return_journey"] = return_journey
@@ -139,7 +136,8 @@ if st.session_state["page"] == "analyzer":
             "Journey Area",
             ["Major City", "Non-Major City"],
             horizontal=True,
-            key="journey_area"
+            key="journey_area",
+            help="Major cities include Thiruvananthapuram, Kollam, Kochi, Thrissur, Kozhikode, Kannur, Palakkad, Kottayam"
         )
         major_city = journey_area == "Major City"
         st.session_state["major_city"] = major_city
