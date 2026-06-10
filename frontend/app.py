@@ -565,9 +565,9 @@ if st.session_state.checked:
 
     try:
         response = requests.post(
-            "http://127.0.0.1:8000/predict",
+            "https://smartfare-ai-backend.onrender.com/predict",
             json=payload,
-            timeout=20
+            timeout=35
         )
 
         if response.status_code == 200:
