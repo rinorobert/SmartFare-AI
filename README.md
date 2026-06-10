@@ -110,19 +110,27 @@ The application was validated using multiple functional test scenarios covering 
 
 ### Application Screenshots
 
-#### Fare Analyzer
+---
+
+#### 1. Fare Analyzer
 
 ![Fare Analyzer](assets/analyzer.png)
 
-#### Fare Transparency Report
+---
+
+#### 2. Fare Transparency Report
 
 ![Fare Transparency Report](assets/report.png)
 
-#### Fare Breakdown
+---
+
+#### 3. Fare Breakdown
 
 ![Fare Breakdown](assets/breakdown.png)
 
-#### Kerala Fare Rules
+---
+
+#### 4. Kerala Fare Rules
 
 ![Fare Calculation Rules](assets/rules.png)
 
