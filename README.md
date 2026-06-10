@@ -104,8 +104,6 @@ Fare Transparency Report
 
 ### Test Cases
 
-The application was validated using multiple functional test scenarios covering day/night travel, waiting charges, return journeys, major city exceptions, invalid inputs, and fare transparency workflows.
-
 📄 Test Cases: [View Test Cases](docs/test_cases.md)
 
 ### Application Screenshots
