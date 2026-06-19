@@ -1,10 +1,11 @@
 pandas
 numpy
 scikit-learn
+joblib
 jupyter
 fastapi
 uvicorn
-streamlit
-requests
 streamlit==1.31.1
 altair<5
+requests
+reportlab
