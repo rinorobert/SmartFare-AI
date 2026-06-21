@@ -200,9 +200,9 @@ SmartFare-AI/
 
 **Frontend:** https://smartfare-ai-mqpgtrah6ub96c2h3dugsc.streamlit.app
 
-**API Documentation:** https://smartfare-ai-backend.onrender.com/docs
+**Backend API Docs:** https://smartfare-ai-4uxu.onrender.com/docs
 
-> Note: The backend is hosted on Render's free tier and may take a few seconds to wake up after inactivity.
+> Note: The backend is hosted on Render's free tier and may take 30–60 seconds to wake up after inactivity.
 
 ---
 

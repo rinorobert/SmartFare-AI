@@ -588,6 +588,10 @@ if st.session_state["page"] == "analyzer":
     if analysis_complete and data:
         submitted = st.session_state["last_trip"]
 
+        # Use the timestamp captured once at analysis time — NOT regenerated
+        # on every rerender. This keeps the receipt, PDF, and history all
+        # showing the same moment instead of drifting forward on every
+        # tab switch or interaction.
         ts     = st.session_state.get("receipt_ts") or datetime.now().strftime("%d %b %Y, %I:%M %p")
         ref_id = st.session_state.get("receipt_ref") or f"#{ts.replace(' ','').replace(':','').replace(',','')[-8:].upper()}"
 
@@ -599,6 +603,9 @@ if st.session_state["page"] == "analyzer":
         st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
         st.markdown("<span class='eyebrow'>Fare Transparency Receipt</span>", unsafe_allow_html=True)
 
+        # Build and render receipt — CSS works fully inside components.html
+        # scrolling=True prevents content from being clipped if a trip has
+        # many surcharges and the receipt grows taller than the fixed height.
         receipt_html = build_receipt_html(data, submitted, ts, ref_id)
         components.html(receipt_html, height=860, scrolling=True)
 
@@ -701,7 +708,7 @@ if st.session_state["page"] == "breakdown":
             "Amount (₹)":[data["government_expected_fare"], typical, data["quoted_fare"]]
         }).set_index("Fare Type")
         st.bar_chart(chart_df, color="#F5C842")
-        st.caption("Left to right: Govt Fare (legal max) → Quoted Fare (driver asked) → Typical Fare (Kerala est.)")
+        st.caption("Left to right: Govt Fare (legal max) → Typical Fare (Kerala est.) → Quoted Fare (driver asked)")
 
         st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
         st.markdown("<span class='eyebrow'>What Do These Amounts Mean?</span>", unsafe_allow_html=True)
@@ -806,6 +813,10 @@ if st.session_state["page"] == "history":
 
                 st.markdown("<hr style='margin:8px 0;border-color:#1F2937;'>", unsafe_allow_html=True)
 
+                # Full trip detail grid — previously only showed Distance, Period,
+                # and Journey Area. Waiting Time and Return Journey directly affect
+                # the fare calculation and were missing, making it impossible to
+                # understand why two similar-distance trips had different fares.
                 g1,g2,g3,g4,g5 = st.columns(5)
                 for col,lbl,val in [
                     (g1,"Distance",f"{d['distance_km']} km"),
@@ -989,7 +1000,7 @@ if st.session_state["page"] == "about":
                 "<div style='text-align:center;padding:8px;'>"
                 "<div style='font-size:1.4rem;margin-bottom:6px;'>📡</div>"
                 "<div style='font-size:0.78rem;color:#6B7280;margin-bottom:6px;'>Backend API Docs</div>"
-                "<a href='https://smartfare-ai-backend.onrender.com/docs' target='_blank' "
+                "<a href='https://smartfare-ai-4uxu.onrender.com/docs' target='_blank' "
                 "style='color:#F5C842;text-decoration:none;font-size:0.82rem;font-weight:600;'>"
                 "View Docs ↗</a>"
                 "<div style='font-size:0.68rem;color:#4B5563;margin-top:4px;'>"
@@ -1053,7 +1064,7 @@ if st.session_state.checked:
              "major_city":trip["journey_area"]=="Major City"}
     try:
         with st.spinner("Calculating fare..."):
-            response=requests.post("https://smartfare-ai-backend.onrender.com/predict",
+            response=requests.post("https://smartfare-ai-4uxu.onrender.com/predict",
                                    json=payload,timeout=35)
         if response.status_code==200:
             result=response.json()
